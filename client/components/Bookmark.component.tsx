@@ -2,6 +2,7 @@ import styles from "../styles/components/Bookmark.module.scss";
 import Tag from "./Tag.component";
 
 interface BookmarkProps {
+  isAdmin: boolean;
   cover_url?: string;
   url?: string;
   title?: string;
@@ -30,6 +31,10 @@ export default function Bookmark(props: BookmarkProps) {
       {Boolean(props.title) && (
         <div className={styles.meta}>
           <a href={`${props.url}`}>
+            <div className={styles.admin}>
+              <i className="far fa-edit"></i>
+              <i className="fa fa-trash"></i>
+            </div>
             <h1 className="font-medium text-lg">{props.title} </h1>
             <p>{props.description}</p>
             <div className="pt-2 pb-2">
@@ -41,3 +46,6 @@ export default function Bookmark(props: BookmarkProps) {
     </div>
   );
 }
+Bookmark.defaultProps = {
+  isAdmin: false,
+};
