@@ -31,7 +31,6 @@ export default function BookmarkList(props: BookmarkListProps) {
 
   useEffect(() => {
     axios.get(`${url}/bookmarks`).then((response) => {
-      console.log(response.data.data);
       setBookmarks(response.data.data);
     });
   }, []);
@@ -46,6 +45,7 @@ export default function BookmarkList(props: BookmarkListProps) {
           return (
             <Bookmark
               key={i}
+              id={b.id}
               isAdmin={props.isAdmin}
               url={b.attributes.url}
               title={b.attributes.title}

@@ -12,6 +12,8 @@ import BookmarkForm from "../../components/BookmarkForm";
 import Article from "../../components/Article.component";
 import BookmarkList from "../../components/BookmarkList.component";
 import ArticleList from "../../components/ArticleList.component";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Attributes {
   url: string;
@@ -33,8 +35,6 @@ const AdminPage: NextPage = () => {
     setShowModal(!showModal);
   };
 
-  
-
   return (
     <div className={styles.container}>
       <Head>
@@ -48,19 +48,24 @@ const AdminPage: NextPage = () => {
         <Header />
 
         <div className="container mt-4mx-auto">
-          <div className={styles.actions}>
+          <div
+            className={
+              styles.actions +
+              " invisible md:visible lg:visible xl:visible sm:visible"
+            }
+          >
             <Button priority="outline">Edit Settings</Button>
             <Button onClick={toggleModal}>Create Bookmark</Button>
             <Button>Create Article</Button>
+            {/* <Button onClick={notify}>Toast Message</Button> */}
+            <ToastContainer />
           </div>
         </div>
-        {showModal}
         {showModal && (
           <Modal handleClose={toggleModal}>
             <BookmarkForm></BookmarkForm>
           </Modal>
         )}
-
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
           <BookmarkList isAdmin={true}></BookmarkList>
           <ArticleList isAdmin={true}></ArticleList>

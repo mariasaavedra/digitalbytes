@@ -1,9 +1,12 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import styles from "../styles/components/Bookmark.module.scss";
 import Modal from "./Modal.component";
 import Tag from "./Tag.component";
 
 interface BookmarkProps {
+  id: number;
   isAdmin: boolean;
   cover_url?: string;
   url?: string;
@@ -13,10 +16,24 @@ interface BookmarkProps {
 }
 
 export default function Bookmark(props: BookmarkProps) {
+  const url = "http://api.digitalbytes.com:1337/api";
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleDelete = () => {
     setShowDeleteModal(!showDeleteModal);
+    try {
+      axios.delete(`${url}/bookmarks/${props.id}`).then(() => {
+        toast.success("Deleted successfully", {
+          position: "bottom-right",
+          theme: "light",
+        });
+      });
+    } catch (e) {
+      toast.error(e as string, {
+        position: "bottom-right",
+        theme: "light",
+      });
+    }
   };
 
   useEffect(() => {
@@ -37,6 +54,7 @@ export default function Bookmark(props: BookmarkProps) {
       {showDeleteModal && (
         <Modal
           confirmLabel="Delete"
+          handleConfirm={handleDelete}
           handleClose={() => setShowDeleteModal(!showDeleteModal)}
         >
           Are you sure you'd like to delete this?
@@ -54,7 +72,7 @@ export default function Bookmark(props: BookmarkProps) {
         {props.isAdmin && (
           <div className={styles.admin}>
             <i className="fas fa-pen text-white"></i>
-            <i onClick={handleDelete} className="fa fa-times text-white"></i>
+            <i onClick={() => setShowDeleteModal(true)} className="fa fa-times text-white"></i>
           </div>
         )}
         {Boolean(props.title) && (
