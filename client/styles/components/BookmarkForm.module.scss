@@ -1,0 +1,15 @@
+.BookmarkFormComponent {
+}
+.placeholder {
+    border: 2px solid #000;
+    border-radius: 2px;
+    padding: 2rem;
+    width: 420px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    > div {
+       text-align: center;
+       margin: 0 auto;
+    }
+}

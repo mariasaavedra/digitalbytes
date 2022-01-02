@@ -3,10 +3,18 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "../styles/components/PlaceholderItem.module.scss";
 
-export default function PlaceholderItem() {
+interface PlaceholderItemProps {
+  onClick: Function
+}
+export default function PlaceholderItem(props: PlaceholderItemProps) {
+  const handleClick = () => {
+    console.log("handle click")
+    props.onClick();
+  }
   return (
     <>
-      <div
+      <div 
+        onClick={handleClick}
         className={
           styles.BookmarkComponent +
           " p-2 bg-white border-8 border-dashed border-black rounded-lg"

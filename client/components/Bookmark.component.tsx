@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import styles from "../styles/components/Bookmark.module.scss";
 import Modal from "./Modal.component";
 import Tag from "./Tag.component";
+import { DebounceInput } from "react-debounce-input";
 
 interface BookmarkProps {
   id: number;
@@ -20,7 +21,35 @@ interface BookmarkProps {
 export default function Bookmark(props: BookmarkProps) {
   const url = "http://api.digitalbytes.com:1337/api";
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [title, setTitle] = useState(props.title);
+  const [description, setDescription] = useState(props.description);
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const handleUpdate = () => {
+    try {
+      axios
+        .put(`${url}/bookmarks/${props.id}`, {
+          data: {
+            title,
+            description,
+          },
+        })
+        .then(() => {
+          if (props.refetch) {
+            props.refetch();
+            toast.success("Successfully updated content", {
+              position: "bottom-right",
+              theme: "light",
+            });
+          }
+        });
+    } catch (e) {
+      toast.error(e as string, {
+        position: "bottom-right",
+        theme: "light",
+      });
+    }
+  };
   const handleDelete = () => {
     setShowDeleteModal(!showDeleteModal);
     try {
@@ -42,12 +71,14 @@ export default function Bookmark(props: BookmarkProps) {
   };
 
   useEffect(() => {
+   
     if (showDeleteModal) {
       setTimeout(() => {
         setShowDeleteModal(!showDeleteModal);
       }, 10000);
     }
-  }, [showDeleteModal]);
+    //handleUpdate();
+  }, [showDeleteModal, title, description]);
 
   const getBookmarkPreview = () => {
     return props.cover_url
@@ -76,7 +107,10 @@ export default function Bookmark(props: BookmarkProps) {
       >
         {props.isAdmin && (
           <div className={styles.admin}>
-            <i onClick={() => setIsEditMode(!isEditMode)} className="fas fa-pen text-white"></i>
+            <i
+              onClick={() => setIsEditMode(!isEditMode)}
+              className="fas fa-pen text-white"
+            ></i>
             <i
               onClick={() => setShowDeleteModal(true)}
               className="fa fa-times text-white"
@@ -84,24 +118,49 @@ export default function Bookmark(props: BookmarkProps) {
           </div>
         )}
 
-        {(isEditMode) && (
+        {isEditMode && (
           <div className={styles.meta}>
             <div className="formGroup">
-              <input 
-                  id="title" 
-                  type="text"
-                  value={props.title}
-                  className="bg-transparent w-100 font-medium text-3xl"
-                />
-              </div>
+              <DebounceInput
+                minLength={2}
+                debounceTimeout={500}
+                placeholder={props.title}
+                value={title}
+                style={{ width: "100%" }}
+                className="bg-white block p-2 w-100 text-black font-medium text-sm"
+                onChange={(event) => { setTitle(event.target.value), handleUpdate()}}
+              />
 
-              <p className="text-lg">{props.description}</p>
-              <div className="pt-2 pb-2">
-                <Tag label="Business"></Tag>
-              </div>
+              {/* <input
+                id="title"
+                type="text"
+                style={{ width: "100%" }}
+                placeholder={props.title}
+                className="bg-white block p-2 w-100 text-black font-medium text-sm"
+              /> */}
+
+              <DebounceInput
+                minLength={2}
+                debounceTimeout={500}
+                value={description}
+                placeholder={props.description}
+                style={{ width: "100%" }}
+                className="mt-4 bg-white block p-2 w-100 text-black font-medium text-sm"
+                onChange={(event) => { setDescription(event.target.value), handleUpdate()}}
+              />
+              {/* <textarea
+                id="description"
+                style={{ width: "100%" }}
+                placeholder={props.description}
+                className="mt-2 bg-white block p-2 w-100 text-black font-medium text-sm"
+              /> */}
+            </div>
+            <div className="pt-2 pb-2">
+              <Tag label="Business"></Tag>
+            </div>
           </div>
         )}
-        {(!isEditMode) && (
+        {!isEditMode && (
           <div className={styles.meta}>
             <a target="_blank" href={`${props.url}`}>
               <h1 className="font-medium text-3xl">{props.title} </h1>
@@ -118,5 +177,5 @@ export default function Bookmark(props: BookmarkProps) {
 }
 Bookmark.defaultProps = {
   isAdmin: false,
-  isEditMode: false
+  isEditMode: false,
 };

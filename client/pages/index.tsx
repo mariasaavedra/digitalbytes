@@ -8,6 +8,10 @@ import Article from "../components/Article.component";
 import Header from "../components/Header.component";
 import ArticleList from "../components/ArticleList.component";
 import BookmarkList from "../components/BookmarkList.component";
+import { ToastContainer } from "react-toastify";
+import Button from "../components/Button.component";
+import Modal from "../components/Modal.component";
+import BookmarkForm from "../components/BookmarkForm";
 
 interface Attributes {
   url: string;
@@ -28,6 +32,10 @@ const Home: NextPage = () => {
   const url = "http://api.digitalbytes.com:1337/api";
   const [bookmarks, setBookmarks] = useState<Array<BookmarksResponse>>();
   const [articles, setArticles] = useState<Array<ArticlesResponse>>();
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   useEffect(() => {
     axios.get(`${url}/bookmarks`).then((response) => {
@@ -48,7 +56,27 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container mx-auto">
-        <Header />
+        <div className="flex justify-between">
+          <Header />
+          <div
+            className={
+              styles.actions +
+              " mt-12 invisible md:visible lg:visible xl:visible sm:visible"
+            }
+          >
+            <Button onClick={toggleModal} priority="outline">
+              Submit Content
+            </Button>
+          </div>
+        </div>
+        {showModal && (
+          <Modal confirmLabel="Submit" handleClose={toggleModal}>
+            <>
+              <p>Submit an entry below.</p>
+              <BookmarkForm></BookmarkForm>
+            </>
+          </Modal>
+        )}
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
           <BookmarkList></BookmarkList>
           <ArticleList></ArticleList>

@@ -33,6 +33,7 @@ const AdminPage: NextPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   const toggleModal = () => {
+    console.log('hell')
     setShowModal(!showModal);
   };
 
@@ -64,7 +65,7 @@ const AdminPage: NextPage = () => {
           </Modal>
         )}
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
-          <PlaceholderItem></PlaceholderItem>
+          <PlaceholderItem onClick={toggleModal}></PlaceholderItem>
           <BookmarkList isAdmin={true}></BookmarkList>
           <ArticleList isAdmin={true}></ArticleList>
         </div>
