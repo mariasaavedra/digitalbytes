@@ -1,11 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import styles from "../../styles/Home.module.scss";
+import styles from "../../styles/Admin.module.scss";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Bookmark from "../../components/Bookmark.component";
 import Banner from "../../components/Banner.component";
 import Header from "../../components/Header.component";
+import Button from "../../components/Button.component";
+import Modal from "../../components/Modal.component";
+import BookmarkForm from "../../components/BookmarkForm";
+import Article from "../../components/Article.component";
 
 interface Attributes {
   url: string;
@@ -19,6 +23,11 @@ interface BookmarksResponse {
 const AdminPage: NextPage = () => {
   const url = "http://api.digitalbytes.com:1337/api";
   const [bookmarks, setBookmarks] = useState<Array<BookmarksResponse>>();
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   useEffect(() => {
     axios.get(`${url}/bookmarks`).then((response) => {
@@ -38,10 +47,24 @@ const AdminPage: NextPage = () => {
       </Head>
 
       <main className="container mx-auto">
-        <Header />
         <Banner label="You are viewing this page as an admin"></Banner>
+        <Header />
+
+        <div className="container mt-4mx-auto">
+          <div className={styles.actions}>
+            <Button priority="outline">Edit Settings</Button>
+            <Button onClick={toggleModal}>Create Bookmark</Button>
+            <Button>Create Article</Button>
+          </div>
+        </div>
+        {showModal}
+        {showModal && (
+          <Modal handleClose={toggleModal}>
+            <BookmarkForm></BookmarkForm>
+          </Modal>
+        )}
+
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
-        <i className="far fa-edit"></i>
           {Boolean(bookmarks.length > 0) &&
             bookmarks.map((b, i) => {
               console.log(b);
@@ -55,6 +78,13 @@ const AdminPage: NextPage = () => {
                 ></Bookmark>
               );
             })}
+
+          <Article
+            isAdmin={true}
+            url=""
+            title="Creating Generative Art with Processing"
+            description="Inspired by natural systems like plant growth, evolution, infinity, fractals, mimetic topographies, and sacred geometrie"
+          ></Article>
         </div>
       </main>
     </div>

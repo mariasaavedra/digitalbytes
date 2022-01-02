@@ -4,28 +4,38 @@ import styles from "../styles/Home.module.scss";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Bookmark from "../components/Bookmark.component";
+import Article from "../components/Article.component";
+import Header from "../components/Header.component";
 
 interface Attributes {
   url: string;
+  content?: string;
   description?: string;
   title?: string;
 }
 interface BookmarksResponse {
   attributes: Attributes;
 }
+interface ArticlesResponse {
+  id: number;
+  attributes: Attributes;
+}
 
 const Home: NextPage = () => {
   const url = "http://api.digitalbytes.com:1337/api";
   const [bookmarks, setBookmarks] = useState<Array<BookmarksResponse>>();
+  const [articles, setArticles] = useState<Array<ArticlesResponse>>();
 
   useEffect(() => {
     axios.get(`${url}/bookmarks`).then((response) => {
-      console.log(response.data.data);
       setBookmarks(response.data.data);
+    });
+    axios.get(`${url}/articles`).then((response) => {
+      setArticles(response.data.data);
     });
   }, []);
 
-  if (!bookmarks) return null;
+  if (!bookmarks || !articles) return null;
 
   return (
     <div className={styles.container}>
@@ -35,13 +45,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container mx-auto">
-        <div className="mt-8">
-          <img width="150px" src="images/logo-black.png"></img>
-        </div>
+        <Header/>
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
           {Boolean(bookmarks.length > 0) &&
             bookmarks.map((b, i) => {
-              console.log(b);
               return (
                 <Bookmark
                   key={i}
@@ -49,6 +56,18 @@ const Home: NextPage = () => {
                   title={b.attributes.title}
                   description={b.attributes.description}
                 ></Bookmark>
+              );
+            })}
+
+            {Boolean(articles.length > 0) &&
+            articles.map((b, i) => {
+              return (
+                <Article
+                  key={i}
+                  id={b.id}
+                  title={b.attributes.title}
+                  content={b.attributes.content}
+                ></Article>
               );
             })}
         </div>
