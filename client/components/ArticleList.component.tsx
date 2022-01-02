@@ -31,7 +31,6 @@ export default function ArticleList(props: ArticleListProps) {
   const [articles, setArticles] = useState<Array<BookmarksResponse>>([]);
   const refetch = () => {
     axios.get(`${url}/articles`).then((response) => {
-      console.log("callback")
       setArticles(response.data.data);
     });
   }
@@ -39,7 +38,6 @@ export default function ArticleList(props: ArticleListProps) {
   useEffect(() => {
     console.log("use effect?")
     axios.get(`${url}/articles`).then((response) => {
-      console.log(response.data.data);
       setArticles(response.data.data);
     });
   }, []);

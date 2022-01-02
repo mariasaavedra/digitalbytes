@@ -7,26 +7,31 @@ import Tag from "./Tag.component";
 
 interface BookmarkProps {
   id: number;
+  //isEditMode: boolean;
   isAdmin: boolean;
   cover_url?: string;
   url?: string;
   title?: string;
   description?: string;
   tags?: Array<string>;
+  refetch?: Function;
 }
 
 export default function Bookmark(props: BookmarkProps) {
   const url = "http://api.digitalbytes.com:1337/api";
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+  const [isEditMode, setIsEditMode] = useState(false);
   const handleDelete = () => {
     setShowDeleteModal(!showDeleteModal);
     try {
       axios.delete(`${url}/bookmarks/${props.id}`).then(() => {
-        toast.success("Deleted successfully", {
-          position: "bottom-right",
-          theme: "light",
-        });
+        if (props.refetch) {
+          props.refetch();
+          toast.success("Deleted successfully", {
+            position: "bottom-right",
+            theme: "light",
+          });
+        }
       });
     } catch (e) {
       toast.error(e as string, {
@@ -71,15 +76,36 @@ export default function Bookmark(props: BookmarkProps) {
       >
         {props.isAdmin && (
           <div className={styles.admin}>
-            <i className="fas fa-pen text-white"></i>
-            <i onClick={() => setShowDeleteModal(true)} className="fa fa-times text-white"></i>
+            <i onClick={() => setIsEditMode(!isEditMode)} className="fas fa-pen text-white"></i>
+            <i
+              onClick={() => setShowDeleteModal(true)}
+              className="fa fa-times text-white"
+            ></i>
           </div>
         )}
-        {Boolean(props.title) && (
+
+        {(isEditMode) && (
           <div className={styles.meta}>
-            <a href={`${props.url}`}>
-              <h1 className="font-medium text-3xl">{props.title} </h1>
+            <div className="formGroup">
+              <input 
+                  id="title" 
+                  type="text"
+                  value={props.title}
+                  className="bg-transparent w-100 font-medium text-3xl"
+                />
+              </div>
+
               <p className="text-lg">{props.description}</p>
+              <div className="pt-2 pb-2">
+                <Tag label="Business"></Tag>
+              </div>
+          </div>
+        )}
+        {(!isEditMode) && (
+          <div className={styles.meta}>
+            <a target="_blank" href={`${props.url}`}>
+              <h1 className="font-medium text-3xl">{props.title} </h1>
+              <p className="text-sm">{props.description}</p>
               <div className="pt-2 pb-2">
                 <Tag label="Business"></Tag>
               </div>
@@ -92,4 +118,5 @@ export default function Bookmark(props: BookmarkProps) {
 }
 Bookmark.defaultProps = {
   isAdmin: false,
+  isEditMode: false
 };

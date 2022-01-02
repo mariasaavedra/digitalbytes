@@ -14,6 +14,7 @@ import BookmarkList from "../../components/BookmarkList.component";
 import ArticleList from "../../components/ArticleList.component";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PlaceholderItem from "../../components/PlaceholderItem";
 
 interface Attributes {
   url: string;
@@ -45,21 +46,17 @@ const AdminPage: NextPage = () => {
 
       <main className="container mx-auto">
         <Banner label="You are viewing this page as an admin"></Banner>
+        
+        <div className="flex justify-between">
         <Header />
-
-        <div className="container mt-4mx-auto">
-          <div
-            className={
-              styles.actions +
-              " invisible md:visible lg:visible xl:visible sm:visible"
-            }
-          >
+        <div className={styles.actions + " mt-12 invisible md:visible lg:visible xl:visible sm:visible"}>
             <Button priority="outline">Edit Settings</Button>
-            <Button onClick={toggleModal}>Create Bookmark</Button>
-            <Button>Create Article</Button>
-            {/* <Button onClick={notify}>Toast Message</Button> */}
             <ToastContainer />
           </div>
+        </div>
+
+        <div className="container mt-4mx-auto">
+
         </div>
         {showModal && (
           <Modal handleClose={toggleModal}>
@@ -67,6 +64,7 @@ const AdminPage: NextPage = () => {
           </Modal>
         )}
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
+          <PlaceholderItem></PlaceholderItem>
           <BookmarkList isAdmin={true}></BookmarkList>
           <ArticleList isAdmin={true}></ArticleList>
         </div>

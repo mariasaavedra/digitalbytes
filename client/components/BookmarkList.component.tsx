@@ -28,7 +28,11 @@ interface BookmarksResponse {
 export default function BookmarkList(props: BookmarkListProps) {
   const url = "http://api.digitalbytes.com:1337/api";
   const [bookmarks, setBookmarks] = useState<Array<BookmarksResponse>>([]);
-
+  const refetch = () => {
+    axios.get(`${url}/bookmarks`).then((response) => {
+      setBookmarks(response.data.data);
+    });
+  }
   useEffect(() => {
     axios.get(`${url}/bookmarks`).then((response) => {
       setBookmarks(response.data.data);
@@ -45,6 +49,7 @@ export default function BookmarkList(props: BookmarkListProps) {
           return (
             <Bookmark
               key={i}
+              refetch={refetch}
               id={b.id}
               isAdmin={props.isAdmin}
               url={b.attributes.url}

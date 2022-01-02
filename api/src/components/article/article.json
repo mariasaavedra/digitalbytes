@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_article_articles",
+  "info": {
+    "displayName": "Article",
+    "icon": "address-card"
+  },
+  "options": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Content": {
+      "type": "richtext"
+    }
+  }
+}

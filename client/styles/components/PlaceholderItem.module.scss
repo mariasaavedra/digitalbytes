@@ -1,26 +1,13 @@
 
-.ArticleComponent {
+.BookmarkComponent {
   cursor: pointer;
-  background: #34d399;
-  &:nth-child(2n) {
-    background: #000;
-  }
-  &:nth-child(3n) {
-    background: #ccff00;
-    span {
-      color: #fff !important;
-    }
-    .meta {
-      color: #020202;
-    }
-  }
   .meta {
     color: #fff;
     position: absolute;
     z-index: 10;
     bottom: 0;
     right: 0;
-    padding: 2rem;
+    padding: 1rem;
     width: 100%;
   }
   .admin {
@@ -33,5 +20,4 @@
     }
   }
   position: relative;
-
 }

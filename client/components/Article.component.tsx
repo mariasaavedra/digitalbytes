@@ -24,14 +24,13 @@ export default function Article(props: ArticleProps) {
     setShowDeleteModal(!showDeleteModal);
     try {
       axios.delete(`${url}/articles/${props.id}`).then(() => {
-        if(props.refetch){
+        if (props.refetch) {
           props.refetch();
-        };
-        toast.success("Deleted successfully", {
-          position: "bottom-right",
-          theme: "light",
-        });
-
+          toast.success("Deleted successfully", {
+            position: "bottom-right",
+            theme: "light",
+          });
+        }
       });
     } catch (e) {
       toast.error(e as string, {
@@ -39,9 +38,6 @@ export default function Article(props: ArticleProps) {
         theme: "light",
       });
     }
-
-
-
   };
 
   useEffect(() => {
@@ -73,7 +69,10 @@ export default function Article(props: ArticleProps) {
         {props.isAdmin && (
           <div className={styles.admin}>
             <i className="fas fa-pen text-black"></i>
-            <i  onClick={() => setShowDeleteModal(true)}  className="fa fa-times text-black"></i>
+            <i
+              onClick={() => setShowDeleteModal(true)}
+              className="fa fa-times text-black"
+            ></i>
           </div>
         )}
         {Boolean(props.title) && (

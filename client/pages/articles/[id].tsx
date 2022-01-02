@@ -39,7 +39,7 @@ const Article: NextPage = () => {
     <div className={styles.container}>
       <main className="container mx-auto">
         <Header/>
-        <h1 className="mt-10 text-2xl">{article?.attributes.title}</h1>
+        <h1 className="mt-10 text-5xl">{article?.attributes.title}</h1>
         {article?.attributes.content}
       </main>
     </div>
