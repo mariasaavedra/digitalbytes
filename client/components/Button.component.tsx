@@ -32,16 +32,14 @@ export default function Button(props: ButtonProps) {
   };
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    // if passed, execute callback.
+     // if passed, execute callback.
     e.currentTarget.blur();
     if (props.type !== "submit") {
       if (props.onClick) {
-        props.onClick(e);
-        // if no callback was passed, go to url.
+        props.onClick(e); // if no callback was passed, go to url.
       } else if (props.url) {
         goToUrl();
       }
-
       e.preventDefault();
     }
   };
@@ -51,14 +49,14 @@ export default function Button(props: ButtonProps) {
       {props.priority === "default" && (
         <button
           onClick={hasCallback() ? (e) => handleClick(e) : () => {}}
-          className="mx-1 inline-block bg-blue-500 border-2 border-solid   border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="mx-1 inline-block bg-neon border-2 border-solid  border-black hover:bg-black hover:text-white text-black font-bold py-2 px-4 rounded"
         >
           {props.children}
         </button>
       )}
       {props.priority === "outline" && (
         <button
-        onClick={hasCallback() ? (e) => handleClick(e) : () => {}}
+          onClick={hasCallback() ? (e) => handleClick(e) : () => {}}
           className="mx-1 inline-block bg-transparent border-2 border-solid border-slate-800 text-black font-bold py-2 px-4 rounded"
         >
           {props.children}

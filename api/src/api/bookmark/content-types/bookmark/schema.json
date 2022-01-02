@@ -24,13 +24,15 @@
     "cover_url": {
       "type": "string"
     },
-    "cover_media": {
+    "Cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
+        "files",
         "videos"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     }
   }
 }

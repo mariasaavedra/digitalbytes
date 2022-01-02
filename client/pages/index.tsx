@@ -6,12 +6,15 @@ import { useState, useEffect } from "react";
 import Bookmark from "../components/Bookmark.component";
 import Article from "../components/Article.component";
 import Header from "../components/Header.component";
+import ArticleList from "../components/ArticleList.component";
+import BookmarkList from "../components/BookmarkList.component";
 
 interface Attributes {
   url: string;
   content?: string;
   description?: string;
   title?: string;
+  cover_url?: string;
 }
 interface BookmarksResponse {
   attributes: Attributes;
@@ -45,31 +48,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container mx-auto">
-        <Header/>
+        <Header />
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
-          {Boolean(bookmarks.length > 0) &&
-            bookmarks.map((b, i) => {
-              return (
-                <Bookmark
-                  key={i}
-                  url={b.attributes.url}
-                  title={b.attributes.title}
-                  description={b.attributes.description}
-                ></Bookmark>
-              );
-            })}
-
-            {Boolean(articles.length > 0) &&
-            articles.map((b, i) => {
-              return (
-                <Article
-                  key={i}
-                  id={b.id}
-                  title={b.attributes.title}
-                  content={b.attributes.content}
-                ></Article>
-              );
-            })}
+          <BookmarkList></BookmarkList>
+          <ArticleList></ArticleList>
         </div>
       </main>
     </div>

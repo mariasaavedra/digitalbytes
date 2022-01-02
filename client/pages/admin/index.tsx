@@ -10,33 +10,30 @@ import Button from "../../components/Button.component";
 import Modal from "../../components/Modal.component";
 import BookmarkForm from "../../components/BookmarkForm";
 import Article from "../../components/Article.component";
+import BookmarkList from "../../components/BookmarkList.component";
+import ArticleList from "../../components/ArticleList.component";
 
 interface Attributes {
   url: string;
   description?: string;
+  cover_url?: string;
+  content?: string;
   title?: string;
 }
 interface BookmarksResponse {
+  id: number;
   attributes: Attributes;
 }
 
 const AdminPage: NextPage = () => {
   const url = "http://api.digitalbytes.com:1337/api";
-  const [bookmarks, setBookmarks] = useState<Array<BookmarksResponse>>();
   const [showModal, setShowModal] = useState(false);
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
-  useEffect(() => {
-    axios.get(`${url}/bookmarks`).then((response) => {
-      console.log(response.data.data);
-      setBookmarks(response.data.data);
-    });
-  }, []);
-
-  if (!bookmarks) return null;
+  
 
   return (
     <div className={styles.container}>
@@ -65,26 +62,8 @@ const AdminPage: NextPage = () => {
         )}
 
         <div className="mt-4 grid lg:grid-cols-3 sm:grid-cols-1 sm:gap-1 gap-4">
-          {Boolean(bookmarks.length > 0) &&
-            bookmarks.map((b, i) => {
-              console.log(b);
-              return (
-                <Bookmark
-                  key={i}
-                  isAdmin={true}
-                  url={b.attributes.url}
-                  title={b.attributes.title}
-                  description={b.attributes.description}
-                ></Bookmark>
-              );
-            })}
-
-          <Article
-            isAdmin={true}
-            url=""
-            title="Creating Generative Art with Processing"
-            description="Inspired by natural systems like plant growth, evolution, infinity, fractals, mimetic topographies, and sacred geometrie"
-          ></Article>
+          <BookmarkList isAdmin={true}></BookmarkList>
+          <ArticleList isAdmin={true}></ArticleList>
         </div>
       </main>
     </div>

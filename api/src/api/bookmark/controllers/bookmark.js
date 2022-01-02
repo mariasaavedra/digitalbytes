@@ -27,17 +27,5 @@ module.exports = createCoreController(
 
       return response;
     },
-    async findOne(ctx) {
-      strapi.log.info("STRAPI INFORMATION");
-      const { id } = ctx.params;
-      const { query } = ctx;
-
-      const entity = await strapi
-        .service("api::bookmark.bookmark")
-        .findOne(id, query);
-      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
-
-      return this.transformResponse(sanitizedEntity);
-    },
   })
 );
