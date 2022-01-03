@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+html.drawer-open,
+body.drawer-open {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
 .bg-neon {
   background: #ccff00;
 }

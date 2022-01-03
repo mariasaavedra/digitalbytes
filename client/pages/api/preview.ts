@@ -14,7 +14,7 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === 'POST') {
-    console.log(req);
+    //console.log(req);
     res.status(200).json({ status: 'OK' })
   } else {
 

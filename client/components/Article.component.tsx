@@ -2,8 +2,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "../styles/components/Article.module.scss";
+import Drawer from "./Drawer.component";
 import Modal from "./Modal.component";
 import Tag from "./Tag.component";
+
+interface CategoryAttributes {
+  name: string;
+  createdAt: string;
+  publishedAt: string;
+  updatedAt: string;
+}
+
+interface Category {
+  id: number;
+  attributes: CategoryAttributes
+}
 
 interface ArticleProps {
   id: number;
@@ -12,13 +25,16 @@ interface ArticleProps {
   url?: string;
   title?: string;
   content?: string;
-  tags?: Array<string>;
+  categories: Array<Category>;
   refetch?: Function;
 }
 
 export default function Article(props: ArticleProps) {
   const url = "http://api.digitalbytes.com:1337/api";
+  const [showDrawer, setShowDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  console.log("tags!", props.categories)
 
   const handleDelete = () => {
     setShowDeleteModal(!showDeleteModal);
@@ -53,6 +69,15 @@ export default function Article(props: ArticleProps) {
   };
   return (
     <>
+     {showDrawer && (
+        <Drawer isOpen={showDrawer} handleClose={() => setShowDrawer(false)}>
+        <>
+          <h1 className="font-medium text-3xl">{props.title} </h1>
+          <p className="mt-2 leading-relaxed">{props.content}</p>
+        </>
+      </Drawer>
+     )}
+
       {showDeleteModal && (
         <Modal
           confirmLabel="Delete"
@@ -62,16 +87,17 @@ export default function Article(props: ArticleProps) {
           Are you sure you'd like to delete this?
         </Modal>
       )}
+
       <div
         className={styles.ArticleComponent + " rounded-lg"}
         style={{ height: "300px" }}
       >
         {props.isAdmin && (
           <div className={styles.admin}>
-            <i className="fas fa-pen text-black"></i>
+            <i onClick={() => setShowDrawer(true)} className="fas fa-pen text-black"></i>
             <i
               onClick={() => setShowDeleteModal(true)}
-              className="fa fa-times text-black"
+              className="fa fa-trash text-black"
             ></i>
           </div>
         )}
@@ -81,7 +107,9 @@ export default function Article(props: ArticleProps) {
               <h1 className="font-medium text-3xl">{props.title} </h1>
               <p className="mt-2 leading-relaxed">{description()}</p>
               <div className="pt-2 mt-2 pb-2">
-                <Tag label="Article"></Tag>
+                {props.categories.map((c) => {
+                  return (<Tag key={c.id} label={c.attributes.name}></Tag>);
+                })}
               </div>
             </a>
           </div>

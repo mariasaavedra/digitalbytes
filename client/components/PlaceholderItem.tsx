@@ -8,7 +8,6 @@ interface PlaceholderItemProps {
 }
 export default function PlaceholderItem(props: PlaceholderItemProps) {
   const handleClick = () => {
-    console.log("handle click")
     props.onClick();
   }
   return (

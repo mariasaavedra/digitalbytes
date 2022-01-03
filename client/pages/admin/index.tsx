@@ -33,7 +33,6 @@ const AdminPage: NextPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   const toggleModal = () => {
-    console.log('hell')
     setShowModal(!showModal);
   };
 

@@ -17,6 +17,12 @@
     },
     "content": {
       "type": "richtext"
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "mappedBy": "articles"
     }
   }
 }

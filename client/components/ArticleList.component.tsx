@@ -5,13 +5,25 @@ import Article from "./Article.component";
 import Bookmark from "./Bookmark.component";
 import Tag from "./Tag.component";
 
+interface CategoryAttributes {
+  id: string | number;
+  name: string;
+  createdAt: string;
+  publishedAt: string;
+  updatedAt: string;
+}
+
+interface Category {
+  data: Array<CategoryAttributes>
+}
+
 interface ArticleListProps {
   isAdmin: boolean;
   cover_url?: string;
   url?: string;
   title?: string;
   description?: string;
-  tags?: Array<string>;
+  categories: any;
 }
 
 interface Attributes {
@@ -20,6 +32,7 @@ interface Attributes {
   cover_url?: string;
   content?: string;
   title?: string;
+  categories: any;
 }
 interface BookmarksResponse {
   id: number;
@@ -30,14 +43,14 @@ export default function ArticleList(props: ArticleListProps) {
   const url = "http://api.digitalbytes.com:1337/api";
   const [articles, setArticles] = useState<Array<BookmarksResponse>>([]);
   const refetch = () => {
-    axios.get(`${url}/articles`).then((response) => {
+    axios.get(`${url}/articles?populate=*`).then((response) => {
       setArticles(response.data.data);
     });
   }
 
   useEffect(() => {
     console.log("use effect?")
-    axios.get(`${url}/articles`).then((response) => {
+    axios.get(`${url}/articles?populate=*`).then((response) => {
       setArticles(response.data.data);
     });
   }, []);
@@ -48,7 +61,6 @@ export default function ArticleList(props: ArticleListProps) {
     <>
       {Boolean(articles.length > 0) &&
         articles.map((b, i) => {
-          console.log(b);
           return (
             <Article
               key={i}
@@ -58,6 +70,7 @@ export default function ArticleList(props: ArticleListProps) {
               url={b.attributes.url}
               title={b.attributes.title}
               content={b.attributes.description}
+              categories={b.attributes.categories.data}
             ></Article>
           );
         })}

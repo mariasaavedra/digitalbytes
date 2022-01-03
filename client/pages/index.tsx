@@ -38,10 +38,10 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    axios.get(`${url}/bookmarks`).then((response) => {
+    axios.get(`${url}/bookmarks/?populate=*`).then((response) => {
       setBookmarks(response.data.data);
     });
-    axios.get(`${url}/articles`).then((response) => {
+    axios.get(`${url}/articles/?populate=*`).then((response) => {
       setArticles(response.data.data);
     });
   }, []);
